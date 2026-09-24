@@ -1,0 +1,260 @@
+{
+  "name": "Imani Hair Brand",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Imani_hair_brand",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6c33d1f3-f456-4dd2-996c-8e1d38aded9e",
+      "name": "Webhook",
+      "webhookId": "016c4c42-a982-4fc2-a9af-aea9c5da73b1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "69051224-625e-4a11-83b5-a79c96ad52d5",
+              "name": "Full Name",
+              "value": "={{ $json.body.data.fields[0].value }}",
+              "type": "string"
+            },
+            {
+              "id": "a31fde54-219b-41b9-93e0-672f45d47747",
+              "name": "Email",
+              "value": "={{ $json.body.data.fields[1].value }}",
+              "type": "string"
+            },
+            {
+              "id": "79f235f8-c806-46f2-8a0a-14935f91f12a",
+              "name": "Phone Number",
+              "value": "={{ $json.body.data.fields[2].value }}",
+              "type": "string"
+            },
+            {
+              "id": "b8823aac-980a-4214-93c1-342e4650b51b",
+              "name": "Which products would you like to order?",
+              "value": "={{ $json.body.data.fields[5].label }}",
+              "type": "string"
+            },
+            {
+              "id": "9d2a483a-c30b-462f-8841-df0b33d4b07c",
+              "name": "Select size",
+              "value": "={{ $json.body.data.fields[7].options[1].text }}",
+              "type": "string"
+            },
+            {
+              "id": "95781741-2c30-4585-b453-8076335c207f",
+              "name": "Other inquiries",
+              "value": "={{ $json.body.data.fields[8].value }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "ab2fcc5d-5891-45fd-adb6-f6b713e66295",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "qwen-plus",
+          "mode": "list",
+          "cachedResultName": "QWEN-PLUS"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=You are a customer support agent for Imani Hair Brand.\n\nCustomer information from the Tally form:\n\nFull Name: {{$json['Full Name']  }}\nEmail: {{$json.Email  }}\nPhone Number: {{ $json['Phone Number'] }}\nSelected Product(s): {{ $json['Which products would you like to order?'] }}\nSelected Size: {{$json['Select size']  }}\nOther Inquiry: {{  $json['Other inquiries']}}\n\nYour task is to respond ONLY to the customer's inquiry in the \"Other Inquiry\" field.\n\nKeep the email short, clear, polite, and professional.\n\nUse the customer's name when appropriate. Only mention the selected product(s) or size if they are relevant to the customer's inquiry.\n\nDo not answer questions that were not asked.\nDo not invent information about products, prices, availability, shipping, or delivery times.\nIf the information needed to answer the inquiry is not available, politely tell the customer that the support team will follow up.\n\nEnd with:\n\nKind regards,\nImani Hair Brand Customer Support\n\nDo not use em dashes.\nDo not use asterisks."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        0
+      ],
+      "id": "d10b0af2-88af-43dc-b33d-939cc2cdcee3",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "InTsAA0rCsROu5G7",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "11t-LfwZtNjv7d6C28t-pVpktRmujt_qeZBr_nwK0YpQ",
+          "mode": "list",
+          "cachedResultName": "Imani Hair Brand",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11t-LfwZtNjv7d6C28t-pVpktRmujt_qeZBr_nwK0YpQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11t-LfwZtNjv7d6C28t-pVpktRmujt_qeZBr_nwK0YpQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $('Edit Fields').item.json['Full Name'] }}",
+            "Email": "={{ $('Edit Fields').item.json.Email }}",
+            "Phone number": "={{ $('Edit Fields').item.json['Phone Number'] }}",
+            "Which products would you like to order?": "={{ $('Edit Fields').item.json['Which products would you like to order?'] }}",
+            "Select size": "={{ $('Edit Fields').item.json['Select size'] }}",
+            "Other inquiries": "={{ $('Edit Fields').item.json['Other inquiries'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Which products would you like to order?",
+              "displayName": "Which products would you like to order?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Select size",
+              "displayName": "Select size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Other inquiries",
+              "displayName": "Other inquiries",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        800,
+        0
+      ],
+      "id": "0211978f-c432-434b-9678-8e2de9cb46ee",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SzhF1udssStUz9mz",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c96f502a-d09a-4d6d-98a5-cb8cacfcec1f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "37101c54435e09037100baa4f595bb91db14862802081091c5721013b9d2018d"
+  },
+  "nodeGroups": [],
+  "id": "yJFVpSdBjjYvmKjT",
+  "tags": []
+}
